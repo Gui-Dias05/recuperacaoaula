@@ -1,13 +1,16 @@
 <?php
 require_once "conf/Conexao.php";
 class Quadrado{
-    
+    private $id;
     private $lado;
     private $cor; 
-    public function __construct($lado, $cor){ 
-        $this->setlado  ($lado);
-        $this->setcor ($cor);
+    public function __construct($id, $lado, $cor){ 
+        $this->setId  ($id);
+        $this->setLado  ($lado);
+        $this->setCor ($cor);
     }
+    public function getId(){ return $this->id; }
+    public function setId($id){ $this->id = $id;}
     public function getLado() {return $this->lado;}
     public function getCor() {return $this->cor;}
     public function setLado($lado) {return $this->lado = $lado;}
@@ -36,7 +39,7 @@ public function __toString(){
             "Diagonal: ".$this->Diagonal()."<br>";
 }
 
-public function Salvar(){
+public function salvar(){
     $pdo = Conexao::getInstance();
             $stmt = $pdo->prepare('INSERT INTO quadrado (lado,cor) VALUES(:lado, :cor)');
             $stmt->bindValue(':lado', $this->getLado());
@@ -45,15 +48,27 @@ public function Salvar(){
 
 }
 
-public function listarVenda($id){
-         require_once("conf/Conexao.php");
-         $conexao = Conexao::getInstance();
 
-         $consulta = $pdo->query("SELECT id, lado, cor
-                                     FROM quadrado
-                                     WHERE id LIKE '$id%' 
-                                     ORDER BY id");
-             }
-}
+function excluir($id){
+                $pdo = Conexao::getInstance();
+                $stmt = $pdo ->prepare('DELETE FROM quadrado WHERE id = :id');
+                $stmt->bindValue(':id', $id);
+                
+                return $stmt->execute();
+            }
+
+            public function editar(){
+                $pdo = Conexao::getInstance();
+                $stmt = $pdo->prepare('UPDATE quadrado SET lado = :lado, cor = :cor
+                WHERE id = :id');
+    
+                $stmt->bindValue(':id', $this->getId());
+                $stmt->bindValue(':lado', $this->getLado());
+                $stmt->bindValue(':cor', $this->getCor());
+    
+                return $stmt->execute();
+            }
+        }
+
 
 ?>

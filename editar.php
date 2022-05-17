@@ -4,15 +4,7 @@
    $title = "Recuperação";
    $lado = isset($_POST["lado"]) ? $_POST["lado"] : 0;
    $cor = isset($_POST["cor"]) ? $_POST["cor"] : "Verde";
- 
-   include_once "processa.php";
-    $acao = isset($_GET['acao']) ? $_GET['acao'] : "";
-    $dados;
-    if ($acao == 'editar'){
-        $id = isset($_GET['id']) ? $_GET['id'] : "";
-    if ($id > 0)
-        $dados = buscarDados($id);
-}
+   $buscar = isset($_POST["buscar"]) ? $_POST["buscar"] : "";
 ?>
 <html>
 <head>
@@ -29,14 +21,9 @@
     ?>
 
 <form action="processa.php" method="post">
+       <input type="color" class="form-control" required type="text" name="cor" id="cor" placeholder="Digite a cor"><br>
 
-       <p>Lado:</p>
-                <input require="true" type="text" name="lado" id="lado" placeholder="Digite o tamanho do lado" 
-                value="<?php if ($acao == "editar") echo $dados['lado'];?>"><br>
-
-            <p>Cor:</p>
-                <input required="true" name="cor" id="cor" type="color" required="true" placeholder="Digite a cor" 
-                value="<?php if ($acao == "editar") echo $dados['cor'];?>" ><br>   
+       <input type="text" class="form-control" required type="text" name="lado" id="lado" placeholder="Digite o tamanho do lado"  value="<?php if ($buscar=="buscar"){echo $lado;}?>">
 
        <button type="submit" class="btn btn-dark" id="buscar" value="ENVIAR">Enviar</button>
 </form><br>

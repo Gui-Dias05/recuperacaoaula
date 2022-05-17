@@ -1,10 +1,38 @@
 <!DOCTYPE html>
+
 <?php   
    require_once "classe/ClassQuadrado.php";
    $title = "Recuperação";
    $lado = isset($_POST["lado"]) ? $_POST["lado"] : 0;
    $cor = isset($_POST["cor"]) ? $_POST["cor"] : "Verde";
    $buscar = isset($_POST["buscar"]) ? $_POST["buscar"] : "";
+
+   $acao = isset($_GET['acao']) ? $_GET['acao'] : "";
+   if ($acao == "excluir"){
+       $id = isset($_GET['id']) ? $_GET['id'] : 0;
+       $quad = new Quadrado("", "", "");
+       $resultado = $quad->excluir($id);
+       header("location:listar.php");
+   }
+   $acao = isset($_POST['acao']) ? $_POST['acao'] : "";
+    if ($acao == "salvar"){
+        $id = isset($_POST['id']) ? $_POST['id'] : "";
+
+        try{
+        if ($id == 0){
+            $quad = new Quadrado("", $_POST['lado'], $_POST['cor']);      
+            $resultado = $quad->insere();
+            header("location:index.php");
+        }else {
+            $quad = new Quadrado($_POST['id'], $_POST['lado'], $_POST['cor']);
+            $resultado = $quad->editar();
+        }    
+        header("location:show.php");    
+    }catch(Exception $e){
+        echo "<h1>Erro ao cadastrar o Quadrado.<h1>
+        <br> Erro: <br>".$e->getMessage();
+    }     
+}
 ?>
 <html>
 <head>
@@ -27,18 +55,13 @@
 <?php
     
     
-    $quad = new Quadrado($lado, $cor);
+    $quad = new Quadrado($id, $lado, $cor);
         echo $quad;
 
         $quad->Salvar();
     ?>
 
 
-
-<br><br>
-
-
-<div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="bootstrap/js/bootstrap.min.js" crossorigin="anonymous"></script>
